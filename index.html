@@ -713,10 +713,6 @@
                 <button class="btn" onclick="createPromoCode()" style="margin-top: 10px;">
                     🎫 Создать промокод
                 </button>
-                
-                <button class="btn" onclick="giveStarsAdmin()" style="margin-top: 10px; background: linear-gradient(45deg, #4ade80, #22c55e);">
-                    🎯 Выдать звёзды
-                </button>
             </div>
             
             <div class="credits">
@@ -1361,21 +1357,47 @@
             const maxUses = parseInt(document.getElementById('promoMaxUses').value);
             
             if (password !== ADMIN_PASSWORD) {
-                showNotification('❌ Неверный пароль администратор!', 'error');
+                showNotification('❌ Неверный пароль администратора!', 'error');
                 return;
             }
             
-            const adminStars = 1000;
-            balance += adminStars;
-            updateBalance();
+            if (!promoCode) {
+                showNotification('❌ Введите название промокода!', 'error');
+                return;
+            }
+            
+            if (!stars || stars < 1) {
+                showNotification('❌ Введите корректное количество звёзд!', 'error');
+                return;
+            }
+            
+            if (!maxUses || maxUses < 1) {
+                showNotification('❌ Введите корректное количество активаций!', 'error');
+                return;
+            }
+            
+            // Создаем промокод
+            promoCodes[promoCode] = {
+                stars: stars,
+                used: 0,
+                maxUses: maxUses
+            };
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
+            
+            // Очищаем поля
+            document.getElementById('newPromoCode').value = '';
+            document.getElementById('promoStars').value = '';
+            document.getElementById('promoMaxUses').value = '100';
+            document.getElementById('adminPassword').value = '';
             
             showNotification(
-                `✅ Выдано ${adminStars} звёзд администратору!\n` +
-                `✨ Теперь звёзд: ${balance} ⭐`,
+                `✅ Промокод "${promoCode}" создан!\n` +
+                `⭐ Звёзд: ${stars}\n` +
+                `🔄 Активаций: ${maxUses}`,
                 'success'
             );
-            
-            document.getElementById('adminPassword').value = '';
         }
         
         // ===== УВЕДОМЛЕНИЯ =====
