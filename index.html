@@ -860,15 +860,23 @@
         let promoVisible = false;
         const ADMIN_PASSWORD = "Pepe_Fafa56_Admin12";
         
-        // База данных промокодов
+        // База данных промокодов (для всех пользователей)
         let promoCodes = JSON.parse(localStorage.getItem('promoCodes')) || {
             'WELCOME100': { stars: 10, used: 0, maxUses: 100 },
             'START50': { stars: 50, used: 0, maxUses: 100 },
             'BONUS30': { stars: 30, used: 0, maxUses: 200 }
         };
         
-        // Активнованные промокоды пользователя
-        let usedPromoCodes = JSON.parse(localStorage.getItem('usedPromoCodes')) || [];
+        // Активнованные промокоды текущего пользователя
+        // Используем уникальный ключ для каждого пользователя
+        const USER_ID = localStorage.getItem('userId') || generateUserId();
+        let usedPromoCodes = JSON.parse(localStorage.getItem(`usedPromoCodes_${USER_ID}`)) || [];
+        
+        function generateUserId() {
+            const id = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+            localStorage.setItem('userId', id);
+            return id;
+        }
         
         // Кейсы с маленькими выигрышами
         const cases = [
@@ -909,13 +917,13 @@
         });
         
         function initApp() {
-            // Загружаем баланс
-            const savedBalance = localStorage.getItem('starBalance');
+            // Загружаем баланс для текущего пользователя
+            const savedBalance = localStorage.getItem(`starBalance_${USER_ID}`);
             if (savedBalance !== null) {
                 balance = parseInt(savedBalance);
             } else {
                 balance = 0;
-                localStorage.setItem('starBalance', '0');
+                localStorage.setItem(`starBalance_${USER_ID}`, '0');
             }
             
             updateBalance();
@@ -1002,7 +1010,7 @@
                 balanceEl.classList.add('pulse');
             }
             
-            localStorage.setItem('starBalance', balance);
+            localStorage.setItem(`starBalance_${USER_ID}`, balance.toString());
             
             setTimeout(() => {
                 if (balance > 0) balanceEl.classList.remove('pulse');
@@ -1110,13 +1118,13 @@
             document.getElementById('confirmWithdrawBtn').disabled = true;
             
             // Сохраняем историю выводов
-            const withdrawals = JSON.parse(localStorage.getItem('withdrawals') || '[]');
+            const withdrawals = JSON.parse(localStorage.getItem(`withdrawals_${USER_ID}`) || '[]');
             withdrawals.push({
                 amount: withdrawAmount,
                 date: new Date().toISOString(),
                 balanceAfter: balance
             });
-            localStorage.setItem('withdrawals', JSON.stringify(withdrawals));
+            localStorage.setItem(`withdrawals_${USER_ID}`, JSON.stringify(withdrawals));
             
             showNotification(
                 `✅ Запрос на вывод ${withdrawAmount} звёзд отправлен!\n` +
@@ -1287,11 +1295,13 @@
         }
         
         function activatePromoCode(promoCode) {
+            // Проверяем, активировал ли этот пользователь уже этот промокод
             if (usedPromoCodes.includes(promoCode)) {
                 showNotification('❌ Вы уже активировали этот промокод!', 'error');
                 return;
             }
             
+            // Проверяем существование промокода в общей базе
             if (!promoCodes[promoCode]) {
                 showNotification('❌ Промокод не найден!', 'error');
                 return;
@@ -1299,17 +1309,24 @@
             
             const promo = promoCodes[promoCode];
             
+            // Проверяем лимит активаций (общий для всех пользователей)
             if (promo.used >= promo.maxUses) {
                 showNotification('❌ Промокод больше не действителен!', 'error');
                 return;
             }
             
+            // Начисляем звёзды пользователю
             balance += promo.stars;
+            
+            // Увеличиваем счетчик использований промокода (общий для всех)
             promo.used += 1;
+            
+            // Добавляем промокод в список использованных для этого пользователя
             usedPromoCodes.push(promoCode);
             
+            // Сохраняем обновленные данные
             localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
-            localStorage.setItem('usedPromoCodes', JSON.stringify(usedPromoCodes));
+            localStorage.setItem(`usedPromoCodes_${USER_ID}`, JSON.stringify(usedPromoCodes));
             
             updateBalance();
             hidePromoModal();
@@ -1376,14 +1393,14 @@
                 return;
             }
             
-            // Создаем промокод
+            // Создаем промокод (будет доступен для всех пользователей)
             promoCodes[promoCode] = {
                 stars: stars,
                 used: 0,
                 maxUses: maxUses
             };
             
-            // Сохраняем в localStorage
+            // Сохраняем в localStorage (общая база данных промокодов)
             localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
             
             // Очищаем поля
@@ -1393,9 +1410,9 @@
             document.getElementById('adminPassword').value = '';
             
             showNotification(
-                `✅ Промокод "${promoCode}" создан!\n` +
+                `✅ Промокод "${promoCode}" создан и доступен для ВСЕХ пользователей!\n` +
                 `⭐ Звёзд: ${stars}\n` +
-                `🔄 Активаций: ${maxUses}`,
+                `🔄 Максимум активаций: ${maxUses}`,
                 'success'
             );
         }
