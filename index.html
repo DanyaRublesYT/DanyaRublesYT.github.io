@@ -1,1438 +1,185 @@
+```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ Звёздные Кейсы</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-            animation: gradientBG 15s ease infinite;
-            background-size: 400% 400%;
-        }
-        
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Вкладки */
-        .tabs {
-            display: flex;
-            margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 5px;
-            gap: 5px;
-        }
-        
-        .tab {
-            flex: 1;
-            padding: 16px;
-            text-align: center;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 15px;
-            transition: all 0.3s;
-        }
-        
-        .tab.active {
-            background: rgba(255, 255, 255, 0.25);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Профиль */
-        .user-info {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .user-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff6b6b, #ffd700, #4cc9f0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 35px;
-            border: 3px solid white;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-            animation: avatarPulse 3s infinite alternate;
-            position: relative;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        
-        .avatar::before {
-            content: '⭐';
-            font-size: 40px;
-            animation: starSpin 5s infinite linear;
-        }
-        
-        @keyframes avatarPulse {
-            0% { 
-                transform: scale(1);
-                box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
-            }
-            100% { 
-                transform: scale(1.05);
-                box-shadow: 0 0 25px rgba(76, 201, 240, 0.7);
-            }
-        }
-        
-        @keyframes starSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        .user-details {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .user-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #ffd700;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        .info-item {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .balance {
-            font-size: 36px;
-            font-weight: bold;
-            color: #ffd700;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
-        
-        .balance.zero {
-            color: #ff6b6b;
-            animation: pulseRed 2s infinite;
-        }
-        
-        @keyframes pulseRed {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-        
-        /* Кнопки */
-        .btn {
-            background: linear-gradient(45deg, #9d4edd, #7b2cbf);
-            color: white;
-            border: none;
-            padding: 18px 25px;
-            border-radius: 15px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 10px 0;
-            width: 100%;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn:active {
-            transform: scale(0.98);
-        }
-        
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-        
-        .btn:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-        
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(20, 20);
-                opacity: 0;
-            }
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(157, 78, 221, 0.3);
-        }
-        
-        .btn-admin {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
-        }
-        
-        .btn-pay {
-            background: linear-gradient(45deg, #4ade80, #22c55e);
-        }
-        
-        .btn-withdraw {
-            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
-        }
-        
-        .btn-promo {
-            background: linear-gradient(45deg, #9c27b0, #673ab7);
-        }
-        
-        /* Кейсы */
-        .cases {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .case {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .case h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-            color: #4cc9f0;
-        }
-        
-        .case-price {
-            font-size: 32px;
-            font-weight: bold;
-            color: #ffd700;
-            margin: 15px 0;
-            text-align: center;
-        }
-        
-        .open-btn {
-            width: 100%;
-            background: linear-gradient(45deg, #4cc9f0, #4361ee);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 15px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s;
-        }
-        
-        .open-btn:active {
-            transform: scale(0.98);
-        }
-        
-        .open-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-        
-        /* Модальные окна */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        .modal.active {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #7b2cbf 0%, #9d4edd 100%);
-            padding: 30px;
-            border-radius: 25px;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .input-group {
-            margin: 20px 0;
-        }
-        
-        .input-group label {
-            display: block;
-            margin-bottom: 10px;
-            color: white;
-            font-weight: 500;
-        }
-        
-        .input-group input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 16px;
-        }
-        
-        .input-hint {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 8px;
-            text-align: center;
-        }
-        
-        /* Рулетка */
-        .roulette-modal .modal-content {
-            max-width: 500px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border: 3px solid #ffd700;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-        }
-        
-        .roulette-container {
-            width: 100%;
-            height: 200px;
-            position: relative;
-            margin: 20px 0;
-            overflow: hidden;
-            border-radius: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid #ffd700;
-        }
-        
-        .roulette-wheel {
-            display: flex;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            transition: transform 3s cubic-bezier(0.1, 0.7, 0.2, 1);
-        }
-        
-        .roulette-item {
-            min-width: 70px;
-            height: 70px;
-            margin: 0 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, #9d4edd, #7b2cbf);
-            border-radius: 10px;
-            border: 2px solid #ffd700;
-            font-weight: bold;
-            font-size: 18px;
-            color: #ffd700;
-            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-        }
-        
-        .roulette-item.win {
-            background: linear-gradient(45deg, #4ade80, #22c55e);
-            border-color: #4ade80;
-            animation: winPulse 0.5s infinite alternate;
-        }
-        
-        @keyframes winPulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
-        }
-        
-        .roulette-pointer {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 25px solid #ffd700;
-            z-index: 10;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-        }
-        
-        .win-result {
-            text-align: center;
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(74, 222, 128, 0.2);
-            border-radius: 15px;
-            border: 2px solid #4ade80;
-            display: none;
-        }
-        
-        .win-result.active {
-            display: block;
-        }
-        
-        .win-amount {
-            font-size: 36px;
-            color: #ffd700;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        /* Анимации */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        /* Панели */
-        .promo-panel, .admin-panel {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 25px;
-            margin-top: 25px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            display: none;
-        }
-        
-        .promo-panel.active, .admin-panel.active {
-            display: block;
-        }
-        
-        .contact-info {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            text-align: center;
-        }
-        
-        .contact-info a {
-            color: #4cc9f0;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
-        
-        .welcome-message {
-            display: none;
-        }
-        
-        /* Уведомление (правый верхний угол) */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            max-width: 350px;
-            background: linear-gradient(45deg, #4cc9f0, #4361ee);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 15px;
-            display: none;
-            z-index: 1001;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-out 3.7s forwards;
-            border-left: 5px solid #4cc9f0;
-        }
-        
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
-        }
-        
-        .notification.success {
-            background: linear-gradient(45deg, #4ade80, #22c55e);
-            border-left-color: #4ade80;
-        }
-        
-        .notification.error {
-            background: linear-gradient(45deg, #ef4444, #dc2626);
-            border-left-color: #ef4444;
-        }
-        
-        .notification.info {
-            background: linear-gradient(45deg, #9d4edd, #7b2cbf);
-            border-left-color: #9d4edd;
-        }
-        
-        /* Кредиты */
-        .credits {
-            text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .credits span {
-            color: #ffd700;
-            font-weight: 600;
-        }
-        
-        /* Баланс в кейсах */
-        .balance-indicator {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            font-size: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .balance-indicator .stars {
-            color: #ffd700;
-            font-weight: bold;
-            font-size: 28px;
-            display: block;
-            margin-top: 5px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        
-        /* Модальное окно вывода */
-        .withdraw-modal .modal-content {
-            background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
-            border: 2px solid #60a5fa;
-        }
-        
-        .withdraw-summary {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .withdraw-summary .amount {
-            font-size: 32px;
-            color: #ffd700;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .withdraw-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .btn-confirm {
-            background: linear-gradient(45deg, #10b981, #059669);
-            margin-top: 20px;
-        }
-        
-        .btn-confirm:disabled {
-            background: linear-gradient(45deg, #6b7280, #4b5563);
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Вкладки -->
-        <div class="tabs">
-            <button class="tab active" data-tab="profile">👤 Профиль</button>
-            <button class="tab" data-tab="cases">🎁 Кейсы</button>
-        </div>
-        
-        <!-- Профиль -->
-        <div id="profile" class="tab-content active">
-            <h1 style="text-align: center; margin-bottom: 20px; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">✨ Мой Профиль</h1>
-            
-            <!-- Аватар и информация -->
-            <div class="user-info">
-                <div class="user-header">
-                    <div class="avatar"></div>
-                    <div class="user-details">
-                        <div class="user-name">Космический Кодер</div>
-                    </div>
-                </div>
-                
-                <div class="info-item">
-                    <span>👤 Ник:</span>
-                    <strong style="color: #ffd700;">Космический Кодер</strong>
-                </div>
-                <div class="info-item">
-                    <span>⭐ Звёзды:</span>
-                    <div class="balance" id="balance">0</div>
-                </div>
-            </div>
-            
-            <button class="btn btn-pay" onclick="showContactInfo('pay')">
-                💰 Купить звёзды
-            </button>
-            
-            <button class="btn btn-withdraw" onclick="showWithdrawModal()">
-                💸 Вывести звёзды
-            </button>
-            
-            <button class="btn btn-promo" onclick="showPromoModal()">
-                🎁 Активировать промокод
-            </button>
-            
-            <button class="btn btn-admin" onclick="toggleAdminPanel()">
-                👑 Режим админа
-            </button>
-            
-            <!-- Контактная информация -->
-            <div id="contactPay" class="contact-info" style="display: none;">
-                <h4 style="color: #4ade80; margin-bottom: 10px;">💰 Пополнение баланса</h4>
-                <p>Для покупки звёзд напишите:</p>
-                <p><a href="https://t.me/Z_Lyx" target="_blank">@Z_Lyx</a> (https://t.me/Z_Lyx)</p>
-                <p>Укажите количество звёзд и получите реквизиты для оплаты</p>
-            </div>
-            
-            <!-- Промокод панель -->
-            <div id="promoPanel" class="promo-panel">
-                <h3 style="text-align: center; margin-bottom: 20px; color: #ffd700;">🎁 Активация промокода</h3>
-                <div class="input-group">
-                    <label>Введите промокод:</label>
-                    <input type="text" id="promoCode" placeholder="Например: WELCOME100">
-                </div>
-                <button class="btn btn-promo" onclick="activatePromo()">
-                    ✅ Активировать
-                </button>
-            </div>
-            
-            <!-- Админ панель -->
-            <div id="adminPanel" class="admin-panel">
-                <h3 style="text-align: center; margin-bottom: 20px; color: #ffd700;">⚡ Панель администратора</h3>
-                
-                <div class="input-group">
-                    <label>Создать промокод:</label>
-                    <input type="text" id="newPromoCode" placeholder="Название промокода">
-                </div>
-                
-                <div class="input-group">
-                    <label>Количество звёзд:</label>
-                    <input type="number" id="promoStars" placeholder="Сколько звёзд давать" min="1" max="10000">
-                </div>
-                
-                <div class="input-group">
-                    <label>Максимум активаций:</label>
-                    <input type="number" id="promoMaxUses" placeholder="Сколько раз можно активировать" min="1" max="1000" value="100">
-                </div>
-                
-                <div class="input-group">
-                    <label>Пароль администратора:</label>
-                    <input type="password" id="adminPassword" placeholder="Введите пароль">
-                </div>
-                
-                <button class="btn" onclick="createPromoCode()" style="margin-top: 10px;">
-                    🎫 Создать промокод
-                </button>
-            </div>
-            
-            <div class="credits">
-                Создано с ❤️ <span>@Z_Lyx @GR_52</span>
-            </div>
-        </div>
-        
-        <!-- Кейсы -->
-        <div id="cases" class="tab-content">
-            <h1 style="text-align: center; margin-bottom: 30px; color: #4cc9f0; text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);">🎁 Звёздные Кейсы</h1>
-            
-            <!-- Баланс -->
-            <div class="balance-indicator">
-                <p>🎯 Ваш баланс:</p>
-                <span class="stars" id="balanceCases">0 ⭐</span>
-            </div>
-            
-            <div class="cases">
-                <div class="case">
-                    <h3>🎯 Дешёвка</h3>
-                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 15px; text-align: center;">
-                        Выпадает от 1 до 100 звёзд!
-                    </p>
-                    <div class="case-price">15 ⭐</div>
-                    <button class="open-btn" data-case="0">
-                        Открыть кейс
-                    </button>
-                </div>
-                
-                <div class="case">
-                    <h3>🏴‍☠️ Сундук Пиратов</h3>
-                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 15px; text-align: center;">
-                        Выпадает от 3 до 500 звёзд!
-                    </p>
-                    <div class="case-price">25 ⭐</div>
-                    <button class="open-btn" data-case="1">
-                        Открыть кейс
-                    </button>
-                </div>
-                
-                <div class="case">
-                    <h3>👑 Роскошный Максимум</h3>
-                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 15px; text-align: center;">
-                        Выпадает от 5 до 1000 звёзд!
-                    </p>
-                    <div class="case-price">50 ⭐</div>
-                    <button class="open-btn" data-case="2">
-                        Открыть кейс
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Модальное окно промокода -->
-    <div id="promoModal" class="modal">
-        <div class="modal-content">
-            <h2 style="text-align: center; margin-bottom: 25px;">🎁 Активация промокода</h2>
-            
-            <div class="input-group">
-                <label>Введите промокод:</label>
-                <input type="text" id="promoInput" placeholder="Например: WELCOME100" autofocus>
-            </div>
-            
-            <div style="display: flex; gap: 15px; margin-top: 25px;">
-                <button class="btn btn-promo" onclick="activatePromoModal()" style="flex: 1;">
-                    ✅ Активировать
-                </button>
-                <button class="btn" onclick="hidePromoModal()" style="flex: 1; background: linear-gradient(45deg, #6b7280, #4b5563);">
-                    Отмена
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Модальное окно вывода -->
-    <div id="withdrawModal" class="modal withdraw-modal">
-        <div class="modal-content">
-            <h2 style="text-align: center; margin-bottom: 25px; color: #ffd700;">💸 Вывод звёзд</h2>
-            
-            <div class="input-group">
-                <label>Сколько звёзд хотите вывести?</label>
-                <input type="number" id="withdrawAmount" placeholder="15-100" min="15" max="100" step="1" value="15">
-                <div class="input-hint">Минимум: 15 ⭐ | Максимум: 100 ⭐</div>
-            </div>
-            
-            <div class="withdraw-summary">
-                <p>Вы запросили вывод:</p>
-                <div class="amount" id="withdrawPreview">15 ⭐</div>
-                <div class="withdraw-stats">
-                    <div>Доступно: <span id="availableBalance">0 ⭐</span></div>
-                    <div>Будет после вывода: <span id="afterWithdraw">0 ⭐</span></div>
-                </div>
-            </div>
-            
-            <div id="withdrawError" style="color: #ef4444; text-align: center; margin: 10px 0; display: none;">
-                ❌ Недостаточно звёзд для вывода!
-            </div>
-            
-            <div id="withdrawSuccess" style="color: #10b981; text-align: center; margin: 10px 0; display: none;">
-                ✅ Запрос на вывод отправлен!
-            </div>
-            
-            <div style="display: flex; gap: 15px; margin-top: 25px;">
-                <button class="btn btn-confirm" id="confirmWithdrawBtn" onclick="confirmWithdraw()" style="flex: 1;">
-                    💸 Подтвердить вывод
-                </button>
-                <button class="btn" onclick="hideWithdrawModal()" style="flex: 1; background: linear-gradient(45deg, #6b7280, #4b5563);">
-                    Отмена
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Модальное окно рулетки -->
-    <div id="rouletteModal" class="modal roulette-modal">
-        <div class="modal-content">
-            <h2 id="rouletteTitle" style="text-align: center; margin-bottom: 20px; color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);">🎰 Крутите рулетку!</h2>
-            
-            <div class="roulette-container">
-                <div class="roulette-wheel" id="rouletteWheel"></div>
-                <div class="roulette-pointer"></div>
-            </div>
-            
-            <div class="win-result" id="winResult">
-                <h3>🎉 Поздравляем!</h3>
-                <p>Вы выиграли:</p>
-                <div class="win-amount" id="winAmount">0 ⭐</div>
-                <p id="caseName"></p>
-            </div>
-            
-            <button class="btn" id="closeRouletteBtn" style="margin-top: 20px; display: none;">
-                Закрыть
-            </button>
-        </div>
-    </div>
-    
-    <!-- Уведомление -->
-    <div id="notification" class="notification"></div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>С 8 Марта, мама ❤️</title>
 
-    <script>
-        // ===== ОСНОВНЫЕ ДАННЫЕ =====
-        let balance = 0;
-        let adminVisible = false;
-        let promoVisible = false;
-        const ADMIN_PASSWORD = "Pepe_Fafa56_Admin12";
-        
-        // База данных промокодов (для всех пользователей)
-        let promoCodes = JSON.parse(localStorage.getItem('promoCodes')) || {
-            'WELCOME100': { stars: 10, used: 0, maxUses: 100 },
-            'START50': { stars: 50, used: 0, maxUses: 100 },
-            'BONUS30': { stars: 30, used: 0, maxUses: 200 }
-        };
-        
-        // Активнованные промокоды текущего пользователя
-        // Используем уникальный ключ для каждого пользователя
-        const USER_ID = localStorage.getItem('userId') || generateUserId();
-        let usedPromoCodes = JSON.parse(localStorage.getItem(`usedPromoCodes_${USER_ID}`)) || [];
-        
-        function generateUserId() {
-            const id = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
-            localStorage.setItem('userId', id);
-            return id;
-        }
-        
-        // Кейсы с маленькими выигрышами
-        const cases = [
-            { 
-                name: "Дешёвка", 
-                price: 15,
-                getWinAmount: () => {
-                    const rand = Math.random();
-                    if (rand < 0.9) return Math.floor(Math.random() * 2) + 1;
-                    return Math.floor(Math.random() * 3) + 3;
-                }
-            },
-            { 
-                name: "Сундук Пиратов", 
-                price: 25,
-                getWinAmount: () => {
-                    const rand = Math.random();
-                    if (rand < 0.85) return Math.floor(Math.random() * 6) + 3;
-                    if (rand < 0.95) return Math.floor(Math.random() * 3) + 9;
-                    return Math.floor(Math.random() * 3) + 12;
-                }
-            },
-            { 
-                name: "Роскошный Максимум", 
-                price: 50,
-                getWinAmount: () => {
-                    const rand = Math.random();
-                    if (rand < 0.8) return Math.floor(Math.random() * 6) + 5;
-                    if (rand < 0.95) return Math.floor(Math.random() * 8) + 11;
-                    return Math.floor(Math.random() * 7) + 19;
-                }
-            }
-        ];
-        
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
-        document.addEventListener('DOMContentLoaded', function() {
-            initApp();
-        });
-        
-        function initApp() {
-            // Загружаем баланс для текущего пользователя
-            const savedBalance = localStorage.getItem(`starBalance_${USER_ID}`);
-            if (savedBalance !== null) {
-                balance = parseInt(savedBalance);
-            } else {
-                balance = 0;
-                localStorage.setItem(`starBalance_${USER_ID}`, '0');
-            }
-            
-            updateBalance();
-            initTabs();
-            initCaseButtons();
-            initRoulette();
-            initWithdrawModal();
-            
-            if (savedBalance === null) {
-                setTimeout(() => {
-                    showNotification(
-                        '🎮 Добро пожаловать!\n🎁 Используйте промокод WELCOME100 для получения 10 звёзд',
-                        'info'
-                    );
-                }, 1000);
-            }
-        }
-        
-        function switchTab(tabName) {
-            // Удаляем активный класс
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            // Добавляем активный класс
-            const tabButton = document.querySelector(`[data-tab="${tabName}"]`);
-            const tabContent = document.getElementById(tabName);
-            
-            if (tabButton) tabButton.classList.add('active');
-            if (tabContent) tabContent.classList.add('active');
-            
-            // Обновляем кнопки кейсов
-            if (tabName === 'cases') {
-                updateCaseButtons();
-            }
-            
-            // Скрываем контактную информацию
-            hideContactInfo();
-        }
-        
-        function initTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTab(this.getAttribute('data-tab'));
-                });
-            });
-        }
-        
-        function initCaseButtons() {
-            const buttons = document.querySelectorAll('.open-btn');
-            buttons.forEach((button, index) => {
-                button.addEventListener('click', function() {
-                    openCase(index);
-                });
-            });
-        }
-        
-        function initRoulette() {
-            document.getElementById('closeRouletteBtn').addEventListener('click', function() {
-                document.getElementById('rouletteModal').classList.remove('active');
-            });
-        }
-        
-        function initWithdrawModal() {
-            const withdrawInput = document.getElementById('withdrawAmount');
-            if (withdrawInput) {
-                withdrawInput.addEventListener('input', updateWithdrawPreview);
-            }
-        }
-        
-        // ===== ОБНОВЛЕНИЕ БАЛАНСА =====
-        function updateBalance() {
-            const balanceEl = document.getElementById('balance');
-            const balanceCasesEl = document.getElementById('balanceCases');
-            
-            balanceEl.textContent = balance;
-            if (balanceCasesEl) balanceCasesEl.textContent = balance + ' ⭐';
-            
-            if (balance === 0) {
-                balanceEl.classList.add('zero');
-                balanceEl.classList.remove('pulse');
-            } else {
-                balanceEl.classList.remove('zero');
-                balanceEl.classList.add('pulse');
-            }
-            
-            localStorage.setItem(`starBalance_${USER_ID}`, balance.toString());
-            
-            setTimeout(() => {
-                if (balance > 0) balanceEl.classList.remove('pulse');
-            }, 1000);
-            
-            updateCaseButtons();
-        }
-        
-        function updateCaseButtons() {
-            const buttons = document.querySelectorAll('.open-btn');
-            buttons.forEach((btn, index) => {
-                if (balance < cases[index].price) {
-                    btn.disabled = true;
-                    btn.textContent = 'Недостаточно звёзд';
-                    btn.style.opacity = '0.6';
-                } else {
-                    btn.disabled = false;
-                    btn.textContent = `Открыть за ${cases[index].price} ⭐`;
-                    btn.style.opacity = '1';
-                }
-            });
-        }
-        
-        // ===== ВЫВОД ЗВЁЗД =====
-        function showWithdrawModal() {
-            const modal = document.getElementById('withdrawModal');
-            const withdrawInput = document.getElementById('withdrawAmount');
-            const confirmBtn = document.getElementById('confirmWithdrawBtn');
-            
-            // Сбрасываем состояние
-            document.getElementById('withdrawError').style.display = 'none';
-            document.getElementById('withdrawSuccess').style.display = 'none';
-            
-            // Устанавливаем максимальное значение как текущий баланс, но не более 100
-            let maxWithdraw = Math.min(balance, 100);
-            if (maxWithdraw < 15) maxWithdraw = 15;
-            
-            withdrawInput.max = maxWithdraw;
-            withdrawInput.value = maxWithdraw < 15 ? 15 : maxWithdraw;
-            
-            updateWithdrawPreview();
-            
-            // Активируем или деактивируем кнопку
-            if (balance < 15) {
-                confirmBtn.disabled = true;
-                document.getElementById('withdrawError').style.display = 'block';
-            } else {
-                confirmBtn.disabled = false;
-            }
-            
-            modal.classList.add('active');
-        }
-        
-        function hideWithdrawModal() {
-            document.getElementById('withdrawModal').classList.remove('active');
-        }
-        
-        function updateWithdrawPreview() {
-            const withdrawAmount = parseInt(document.getElementById('withdrawAmount').value) || 15;
-            const availableBalance = document.getElementById('availableBalance');
-            const afterWithdraw = document.getElementById('afterWithdraw');
-            const withdrawPreview = document.getElementById('withdrawPreview');
-            const confirmBtn = document.getElementById('confirmWithdrawBtn');
-            
-            // Проверяем границы
-            if (withdrawAmount < 15) document.getElementById('withdrawAmount').value = 15;
-            if (withdrawAmount > 100) document.getElementById('withdrawAmount').value = 100;
-            
-            const finalAmount = Math.min(100, Math.max(15, withdrawAmount));
-            
-            // Обновляем предпросмотр
-            withdrawPreview.textContent = finalAmount + ' ⭐';
-            availableBalance.textContent = balance + ' ⭐';
-            afterWithdraw.textContent = (balance - finalAmount) + ' ⭐';
-            
-            // Проверяем возможность вывода
-            if (balance >= finalAmount && finalAmount >= 15 && finalAmount <= 100) {
-                confirmBtn.disabled = false;
-                document.getElementById('withdrawError').style.display = 'none';
-            } else {
-                confirmBtn.disabled = true;
-                document.getElementById('withdrawError').style.display = 'block';
-            }
-        }
-        
-        function confirmWithdraw() {
-            const withdrawAmount = parseInt(document.getElementById('withdrawAmount').value);
-            
-            if (withdrawAmount < 15 || withdrawAmount > 100) {
-                showNotification('❌ Сумма вывода должна быть от 15 до 100 звёзд!', 'error');
-                return;
-            }
-            
-            if (balance < withdrawAmount) {
-                showNotification('❌ Недостаточно звёзд для вывода!', 'error');
-                return;
-            }
-            
-            // Списываем звёзды
-            balance -= withdrawAmount;
-            updateBalance();
-            
-            // Показываем успех
-            document.getElementById('withdrawSuccess').style.display = 'block';
-            document.getElementById('confirmWithdrawBtn').disabled = true;
-            
-            // Сохраняем историю выводов
-            const withdrawals = JSON.parse(localStorage.getItem(`withdrawals_${USER_ID}`) || '[]');
-            withdrawals.push({
-                amount: withdrawAmount,
-                date: new Date().toISOString(),
-                balanceAfter: balance
-            });
-            localStorage.setItem(`withdrawals_${USER_ID}`, JSON.stringify(withdrawals));
-            
-            showNotification(
-                `✅ Запрос на вывод ${withdrawAmount} звёзд отправлен!\n` +
-                `📞 Свяжитесь с администратором @Z_Lyx для получения средств\n` +
-                `✨ Остаток на балансе: ${balance} ⭐`,
-                'success'
-            );
-            
-            // Автоматически закрываем через 3 секунды
-            setTimeout(() => {
-                hideWithdrawModal();
-            }, 3000);
-        }
-        
-        // ===== КОНТАКТНАЯ ИНФОРМАЦИЯ =====
-        function showContactInfo(type) {
-            hideContactInfo();
-            hideAllPanels();
-            
-            if (type === 'pay') {
-                document.getElementById('contactPay').style.display = 'block';
-            }
-        }
-        
-        function hideContactInfo() {
-            document.getElementById('contactPay').style.display = 'none';
-        }
-        
-        // ===== ОТКРЫТИЕ КЕЙСОВ С РУЛЕТКОЙ =====
-        function openCase(index) {
-            const caseItem = cases[index];
-            
-            if (balance < caseItem.price) {
-                showNotification('❌ Недостаточно звёзд для открытия кейса!', 'error');
-                return;
-            }
-            
-            // Списываем стоимость
-            balance -= caseItem.price;
-            
-            // Получаем выигрыш
-            const win = caseItem.getWinAmount();
-            
-            // Показываем рулетку
-            showRoulette(caseItem, win);
-        }
-        
-        function showRoulette(caseItem, winAmount) {
-            const modal = document.getElementById('rouletteModal');
-            const wheel = document.getElementById('rouletteWheel');
-            const winResult = document.getElementById('winResult');
-            const winAmountEl = document.getElementById('winAmount');
-            const caseNameEl = document.getElementById('caseName');
-            const closeBtn = document.getElementById('closeRouletteBtn');
-            const title = document.getElementById('rouletteTitle');
-            
-            // Очищаем рулетку
-            wheel.innerHTML = '';
-            winResult.classList.remove('active');
-            closeBtn.style.display = 'none';
-            title.textContent = '🎰 Крутите рулетку!';
-            
-            // Создаем ячейки рулетки (15 ячеек)
-            const totalCells = 15;
-            // Выбираем ячейку для маленького выигрыша (например, 3, 7, 11)
-            const smallWinPositions = [3, 7, 11];
-            const winIndex = smallWinPositions[Math.floor(Math.random() * smallWinPositions.length)];
-            
-            for (let i = 0; i < totalCells; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'roulette-item';
-                
-                if (i === winIndex) {
-                    // Победная ячейка (маленький выигрыш)
-                    cell.innerHTML = `<div>${winAmount}</div><div>⭐</div>`;
-                    cell.dataset.win = winAmount;
-                } else {
-                    // Обычные ячейки
-                    let randomValue;
-                    if (caseItem.name === "Дешёвка") {
-                        // Большие значения для эффекта
-                        randomValue = Math.floor(Math.random() * 71) + 30; // 30-100
-                    } else if (caseItem.name === "Сундук Пиратов") {
-                        randomValue = Math.floor(Math.random() * 476) + 25; // 25-500
-                    } else {
-                        randomValue = Math.floor(Math.random() * 971) + 30; // 30-1000
-                    }
-                    cell.innerHTML = `<div>${randomValue}</div><div>⭐</div>`;
-                }
-                
-                wheel.appendChild(cell);
-            }
-            
-            // Показываем модалку
-            modal.classList.add('active');
-            
-            // Стартовая позиция
-            let currentPosition = 0;
-            wheel.style.transform = `translateX(${currentPosition}px)`;
-            
-            // Анимация рулетки
-            setTimeout(() => {
-                // Запускаем анимацию вращения
-                const targetPosition = -((winIndex * 85) + 1500);
-                wheel.style.transform = `translateX(${targetPosition}px)`;
-                
-                // После окончания анимации
-                setTimeout(() => {
-                    // Показываем результат
-                    winAmountEl.textContent = `${winAmount} ⭐`;
-                    caseNameEl.textContent = `Кейс: ${caseItem.name}`;
-                    winResult.classList.add('active');
-                    
-                    // Помечаем победную ячейку
-                    wheel.children[winIndex].classList.add('win');
-                    
-                    // Добавляем выигрыш к балансу
-                    balance += winAmount;
-                    updateBalance();
-                    
-                    // Показываем кнопку закрытия
-                    closeBtn.style.display = 'block';
-                    title.textContent = '🎉 Результат!';
-                    
-                    // Показываем уведомление
-                    showNotification(
-                        `🎉 Открыт кейс "${caseItem.name}"!\n` +
-                        `💰 Потрачено: ${caseItem.price} ⭐\n` +
-                        `🏆 Выигрыш: ${winAmount} ⭐\n` +
-                        `✨ Теперь звёзд: ${balance} ⭐`,
-                        'success'
-                    );
-                    
-                }, 3000);
-                
-            }, 500);
-        }
-        
-        // ===== ПРОМОКОДЫ =====
-        function showPromoModal() {
-            document.getElementById('promoModal').classList.add('active');
-            document.getElementById('promoInput').focus();
-        }
-        
-        function hidePromoModal() {
-            document.getElementById('promoModal').classList.remove('active');
-            document.getElementById('promoInput').value = '';
-        }
-        
-        function activatePromoModal() {
-            const promoCode = document.getElementById('promoInput').value.trim().toUpperCase();
-            if (!promoCode) {
-                showNotification('❌ Введите промокод!', 'error');
-                return;
-            }
-            
-            activatePromoCode(promoCode);
-        }
-        
-        function activatePromo() {
-            const promoCode = document.getElementById('promoCode').value.trim().toUpperCase();
-            if (!promoCode) {
-                showNotification('❌ Введите промокод!', 'error');
-                return;
-            }
-            
-            activatePromoCode(promoCode);
-        }
-        
-        function activatePromoCode(promoCode) {
-            // Проверяем, активировал ли этот пользователь уже этот промокод
-            if (usedPromoCodes.includes(promoCode)) {
-                showNotification('❌ Вы уже активировали этот промокод!', 'error');
-                return;
-            }
-            
-            // Проверяем существование промокода в общей базе
-            if (!promoCodes[promoCode]) {
-                showNotification('❌ Промокод не найден!', 'error');
-                return;
-            }
-            
-            const promo = promoCodes[promoCode];
-            
-            // Проверяем лимит активаций (общий для всех пользователей)
-            if (promo.used >= promo.maxUses) {
-                showNotification('❌ Промокод больше не действителен!', 'error');
-                return;
-            }
-            
-            // Начисляем звёзды пользователю
-            balance += promo.stars;
-            
-            // Увеличиваем счетчик использований промокода (общий для всех)
-            promo.used += 1;
-            
-            // Добавляем промокод в список использованных для этого пользователя
-            usedPromoCodes.push(promoCode);
-            
-            // Сохраняем обновленные данные
-            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
-            localStorage.setItem(`usedPromoCodes_${USER_ID}`, JSON.stringify(usedPromoCodes));
-            
-            updateBalance();
-            hidePromoModal();
-            
-            showNotification(
-                `✅ Промокод "${promoCode}" активирован!\n` +
-                `🎁 Получено: ${promo.stars} ⭐\n` +
-                `✨ Теперь звёзд: ${balance} ⭐`,
-                'success'
-            );
-            
-            document.getElementById('promoCode').value = '';
-            document.getElementById('promoInput').value = '';
-        }
-        
-        // ===== АДМИН ПАНЕЛЬ =====
-        function toggleAdminPanel() {
-            const panel = document.getElementById('adminPanel');
-            const promoPanel = document.getElementById('promoPanel');
-            
-            hideContactInfo();
-            
-            if (adminVisible) {
-                panel.classList.remove('active');
-                adminVisible = false;
-            } else {
-                panel.classList.add('active');
-                promoPanel.classList.remove('active');
-                adminVisible = true;
-                promoVisible = false;
-            }
-        }
-        
-        function hideAllPanels() {
-            document.getElementById('adminPanel').classList.remove('active');
-            document.getElementById('promoPanel').classList.remove('active');
-            adminVisible = false;
-            promoVisible = false;
-        }
-        
-        function createPromoCode() {
-            const password = document.getElementById('adminPassword').value;
-            const promoCode = document.getElementById('newPromoCode').value.trim().toUpperCase();
-            const stars = parseInt(document.getElementById('promoStars').value);
-            const maxUses = parseInt(document.getElementById('promoMaxUses').value);
-            
-            if (password !== ADMIN_PASSWORD) {
-                showNotification('❌ Неверный пароль администратора!', 'error');
-                return;
-            }
-            
-            if (!promoCode) {
-                showNotification('❌ Введите название промокода!', 'error');
-                return;
-            }
-            
-            if (!stars || stars < 1) {
-                showNotification('❌ Введите корректное количество звёзд!', 'error');
-                return;
-            }
-            
-            if (!maxUses || maxUses < 1) {
-                showNotification('❌ Введите корректное количество активаций!', 'error');
-                return;
-            }
-            
-            // Создаем промокод (будет доступен для всех пользователей)
-            promoCodes[promoCode] = {
-                stars: stars,
-                used: 0,
-                maxUses: maxUses
-            };
-            
-            // Сохраняем в localStorage (общая база данных промокодов)
-            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
-            
-            // Очищаем поля
-            document.getElementById('newPromoCode').value = '';
-            document.getElementById('promoStars').value = '';
-            document.getElementById('promoMaxUses').value = '100';
-            document.getElementById('adminPassword').value = '';
-            
-            showNotification(
-                `✅ Промокод "${promoCode}" создан и доступен для ВСЕХ пользователей!\n` +
-                `⭐ Звёзд: ${stars}\n` +
-                `🔄 Максимум активаций: ${maxUses}`,
-                'success'
-            );
-        }
-        
-        // ===== УВЕДОМЛЕНИЯ =====
-        function showNotification(text, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = text;
-            notification.className = 'notification';
-            
-            if (type === 'success') {
-                notification.classList.add('success');
-            } else if (type === 'error') {
-                notification.classList.add('error');
-            } else if (type === 'info') {
-                notification.classList.add('info');
-            }
-            
-            notification.style.display = 'block';
-        }
-    </script>
+<style>
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#ff7eb3,#ffb6d9,#ffdff2);
+height:100vh;
+overflow:hidden;
+text-align:center;
+color:white;
+}
+
+h1{
+margin-top:25px;
+font-size:28px;
+text-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+
+#counter{
+font-size:20px;
+margin-top:5px;
+margin-bottom:10px;
+}
+
+#game{
+position:relative;
+width:100%;
+height:65vh;
+overflow:hidden;
+}
+
+.heart{
+position:absolute;
+font-size:42px;
+cursor:pointer;
+user-select:none;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh) rotate(0deg);}
+100%{transform:translateY(90vh) rotate(360deg);}
+}
+
+#popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.7);
+backdrop-filter:blur(6px);
+}
+
+#card{
+background:white;
+color:#d81b75;
+padding:25px;
+border-radius:20px;
+width:90%;
+max-width:360px;
+animation:pop .6s;
+}
+
+@keyframes pop{
+0%{transform:scale(.5);opacity:0}
+100%{transform:scale(1);opacity:1}
+}
+
+button{
+margin-top:15px;
+border:none;
+background:#ff4fa3;
+color:white;
+padding:14px 20px;
+font-size:16px;
+border-radius:12px;
+}
+
+iframe{
+margin-top:15px;
+border-radius:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🌸 С 8 Марта, мама 🌸</h1>
+<div id="counter">Поймано: 0 / 5 ❤️</div>
+
+<div id="game"></div>
+
+<div id="popup">
+
+<div id="card">
+
+<h2>Мамочка ❤️</h2>
+
+<p>
+Поздравляю тебя с 8 Марта!  
+Ты самая добрая, самая красивая и самая лучшая мама на свете.  
+Спасибо за всё! Я тебя очень люблю!
+</p>
+
+<iframe width="100%" height="200"
+src="https://www.youtube.com/embed/ZQNHhtHbd1s?start=17&autoplay=1"
+title="Песня для мамы"
+allow="autoplay; encrypted-media"
+allowfullscreen>
+</iframe>
+
+<button onclick="closePopup()">❤️ Люблю тебя</button>
+
+</div>
+
+</div>
+
+<script>
+
+let caught=0
+const maxHearts=5
+const game=document.getElementById("game")
+
+function spawnHeart(){
+
+const heart=document.createElement("div")
+heart.className="heart"
+heart.innerHTML="💖"
+
+heart.style.left=Math.random()*90+"vw"
+
+const speed=4+Math.random()*3
+heart.style.animationDuration=speed+"s"
+
+heart.onclick=()=>{
+
+heart.remove()
+
+caught++
+
+document.getElementById("counter").innerText=
+"Поймано: "+caught+" / "+maxHearts+" ❤️"
+
+if(caught>=maxHearts){
+win()
+}
+
+}
+
+game.appendChild(heart)
+
+setTimeout(()=>{
+heart.remove()
+},speed*1000)
+
+}
+
+function win(){
+document.getElementById("popup").style.display="flex"
+}
+
+function closePopup(){
+document.getElementById("popup").style.display="none"
+}
+
+setInterval(spawnHeart,900)
+
+</script>
+
 </body>
 </html>
+```
