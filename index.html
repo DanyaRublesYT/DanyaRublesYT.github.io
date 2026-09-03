@@ -12,6 +12,7 @@
             overflow: hidden;
             background: #000;
             cursor: pointer;
+            position: relative;
         }
         video {
             width: 100%;
@@ -19,40 +20,71 @@
             object-fit: contain;
             display: block;
         }
+        /* Кнопка myinstants поверх видео */
+        .sound-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10;
+            width: 120px;
+            height: 120px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .sound-button iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none; /* Чтобы клик шёл на кнопку */
+        }
+        /* Оверлей для клика по всей странице */
+        .click-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <!-- Оверлей для клика -->
+    <div class="click-overlay" id="overlay"></div>
+
+    <!-- Видео -->
     <video id="player" muted playsinline>
         <source src="musordrop.mp4" type="video/mp4">
     </video>
 
+    <!-- Кнопка myinstants -->
+    <div class="sound-button">
+        <iframe 
+            src="https://www.myinstants.com/instant/musor-drop-82861/embed/" 
+            allow="autoplay">
+        </iframe>
+    </div>
+
     <script>
         const video = document.getElementById('player');
-        
-        // Создаём аудио-элемент для зацикленного звука
-        const audio = new Audio();
-        audio.src = 'https://www.myinstants.com/media/sounds/musor-drop.mp3';
-        audio.loop = true;
-        audio.volume = 1;
+        const overlay = document.getElementById('overlay');
 
-        // Функция запуска всего
-        function startEverything() {
-            // Видео без звука (muted уже стоит)
+        // Функция запуска видео
+        function playVideo() {
             video.play().catch(() => {});
-            
-            // Зацикленный звук
-            audio.play().catch(() => {});
         }
 
-        // Пытаемся запустить сразу
-        startEverything();
+        // Автозапуск видео
+        playVideo();
 
-        // Если браузер блокирует - запускаем по клику
-        document.addEventListener('click', () => {
-            startEverything();
+        // По клику на оверлей — запускаем видео (звук уже играет с кнопки)
+        overlay.addEventListener('click', () => {
+            playVideo();
         });
 
-        // Клик по видео не должен ставить на паузу
+        // Чтобы клик по видео не ставил на паузу
         video.addEventListener('click', (e) => e.stopPropagation());
     </script>
 </body>
