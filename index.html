@@ -11,7 +11,9 @@
             height: 100vh;
             overflow: hidden;
             background: #000;
-            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
         }
         
@@ -27,69 +29,50 @@
             z-index: 1;
         }
         
-        /* Огромная кнопка ПОВЕРХ видео */
-        .btn {
+        /* Кнопка myinstants ПОВЕРХ видео - ОГРОМНАЯ */
+        .myinstants-btn {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 10;
-            
-            /* Огромный размер */
-            width: 80vw;
-            max-width: 600px;
-            height: 80vw;
-            max-height: 600px;
-            
-            /* Стили */
+            width: min(80vw, 500px);
+            height: min(80vw, 500px);
+            border: none;
             border-radius: 50%;
-            border: 8px solid #fff;
-            background: rgba(255, 0, 0, 0.85);
-            color: #fff;
-            font-size: clamp(28px, 6vw, 64px);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 3px;
+            background: transparent;
             cursor: pointer;
-            box-shadow: 0 0 80px rgba(255, 0, 0, 0.8), inset 0 0 80px rgba(255, 255, 255, 0.1);
-            transition: all 0.2s;
-            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            line-height: 1.2;
-            word-break: break-word;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 0;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.3);
+            transition: transform 0.2s;
         }
         
-        .btn:hover {
-            transform: translate(-50%, -50%) scale(1.07);
-            box-shadow: 0 0 120px rgba(255, 0, 0, 1), inset 0 0 100px rgba(255, 255, 255, 0.2);
+        .myinstants-btn:hover {
+            transform: translate(-50%, -50%) scale(1.05);
         }
         
-        .btn:active {
-            transform: translate(-50%, -50%) scale(0.93);
+        .myinstants-btn:active {
+            transform: translate(-50%, -50%) scale(0.95);
         }
         
-        .btn.playing {
-            background: rgba(0, 200, 0, 0.9);
-            box-shadow: 0 0 80px rgba(0, 200, 0, 0.8), inset 0 0 80px rgba(255, 255, 255, 0.1);
+        .myinstants-btn iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none; /* Чтобы клик шёл на кнопку, а не на iframe */
         }
         
-        .btn.playing:hover {
-            box-shadow: 0 0 120px rgba(0, 200, 0, 1), inset 0 0 100px rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Подпись мелкая внизу (для атмосферы) */
+        /* Подпись для атмосферы */
         .sub {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 5;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.2);
             font-size: 14px;
+            font-family: Arial, sans-serif;
             letter-spacing: 2px;
             pointer-events: none;
             text-transform: uppercase;
@@ -102,40 +85,26 @@
         <source src="musordrop.mp4" type="video/mp4">
     </video>
 
-    <!-- Огромная кнопка поверх видео -->
-    <button class="btn" id="playBtn">🎵<br>ДРОП</button>
+    <!-- САМА КНОПКА С MYINSTANTS (огромная, поверх видео) -->
+    <button class="myinstants-btn" id="myBtn">
+        <iframe 
+            src="https://www.myinstants.com/instant/musor-drop-82861/embed/" 
+            allow="autoplay">
+        </iframe>
+    </button>
 
-    <div class="sub">нажми на круг</div>
+    <div class="sub">нажми на мусорку</div>
 
     <script>
         const video = document.getElementById('player');
-        const btn = document.getElementById('playBtn');
+        const btn = document.getElementById('myBtn');
 
-        // Звук из локального MP3
-        const audio = new Audio('musor-drop.mp3');
-        audio.loop = true;
-        audio.volume = 1;
+        // Автозапуск видео (без звука)
+        video.play().catch(() => {});
 
-        let isPlaying = false;
-
+        // При клике на кнопку myinstants - перезапускаем видео
         btn.addEventListener('click', () => {
-            if (!isPlaying) {
-                // Включаем
-                video.play().catch(() => {});
-                audio.play().catch(() => {});
-                btn.textContent = '🔇\nВЫКЛ';
-                btn.classList.add('playing');
-                isPlaying = true;
-            } else {
-                // Выключаем
-                video.pause();
-                audio.pause();
-                video.currentTime = 0;
-                audio.currentTime = 0;
-                btn.textContent = '🎵\nДРОП';
-                btn.classList.remove('playing');
-                isPlaying = false;
-            }
+            video.play().catch(() => {});
         });
 
         // Клик по видео не должен мешать
