@@ -2,10 +2,42 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=https://t.me/freestars_tgbot?start=8091020356">
-    <title>Перенаправление...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusorDrop</title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <p>Если перенаправление не произошло, <a href="https://t.me/freestars_tgbot?start=8091020356">нажмите сюда</a></p>
+    <video id="player" muted playsinline>
+        <source src="musordrop.mp4" type="video/mp4">
+    </video>
+
+    <script>
+        const video = document.getElementById('player');
+
+        // При загрузке страницы
+        video.play().catch(() => {});
+
+        // При клике в любом месте экрана
+        document.addEventListener('click', () => {
+            video.play().catch(() => {});
+        });
+
+        // Чтобы клик по видео не ставил на паузу
+        video.addEventListener('click', (e) => e.stopPropagation());
+    </script>
 </body>
 </html>
