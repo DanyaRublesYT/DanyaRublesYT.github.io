@@ -11,6 +11,7 @@
             height: 100vh;
             overflow: hidden;
             background: #000;
+            cursor: pointer;
         }
         video {
             width: 100%;
@@ -21,17 +22,26 @@
     </style>
 </head>
 <body>
-    <video id="player" muted playsinline>
+    <video id="player" playsinline>
         <source src="musordrop.mp4" type="video/mp4">
     </video>
 
     <script>
         const video = document.getElementById('player');
 
-        // При загрузке страницы
-        video.play().catch(() => {});
+        // Убираем всё, что глушит звук
+        video.muted = false;
+        video.volume = 1;
 
-        // При клике в любом месте экрана
+        // Автовоспроизведение (может не сработать из-за политики браузера)
+        video.play().catch(() => {
+            // Если заблокировано — ждём клика
+            document.addEventListener('click', () => {
+                video.play().catch(() => {});
+            }, { once: true });
+        });
+
+        // Клик в любом месте — перезапуск со звуком
         document.addEventListener('click', () => {
             video.play().catch(() => {});
         });
