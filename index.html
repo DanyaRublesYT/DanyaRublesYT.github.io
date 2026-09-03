@@ -22,31 +22,37 @@
     </style>
 </head>
 <body>
-    <video id="player" playsinline>
+    <video id="player" muted playsinline>
         <source src="musordrop.mp4" type="video/mp4">
     </video>
 
     <script>
         const video = document.getElementById('player');
+        
+        // Создаём аудио-элемент для зацикленного звука
+        const audio = new Audio();
+        audio.src = 'https://www.myinstants.com/media/sounds/musor-drop.mp3';
+        audio.loop = true;
+        audio.volume = 1;
 
-        // Убираем всё, что глушит звук
-        video.muted = false;
-        video.volume = 1;
-
-        // Автовоспроизведение (может не сработать из-за политики браузера)
-        video.play().catch(() => {
-            // Если заблокировано — ждём клика
-            document.addEventListener('click', () => {
-                video.play().catch(() => {});
-            }, { once: true });
-        });
-
-        // Клик в любом месте — перезапуск со звуком
-        document.addEventListener('click', () => {
+        // Функция запуска всего
+        function startEverything() {
+            // Видео без звука (muted уже стоит)
             video.play().catch(() => {});
+            
+            // Зацикленный звук
+            audio.play().catch(() => {});
+        }
+
+        // Пытаемся запустить сразу
+        startEverything();
+
+        // Если браузер блокирует - запускаем по клику
+        document.addEventListener('click', () => {
+            startEverything();
         });
 
-        // Чтобы клик по видео не ставил на паузу
+        // Клик по видео не должен ставить на паузу
         video.addEventListener('click', (e) => e.stopPropagation());
     </script>
 </body>
